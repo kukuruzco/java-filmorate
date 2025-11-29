@@ -7,8 +7,10 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -29,7 +31,8 @@ class FilmValidationTest {
 
     @BeforeEach
     void setUp() {
-        filmController = new FilmController();
+        FilmService filmService = new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage());
+        filmController = new FilmController(filmService);
         minReleaseDate = LocalDate.of(1895, 12, 28);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -54,7 +57,7 @@ class FilmValidationTest {
         Film film = createValidFilm();
         film.setReleaseDate(minReleaseDate.minusDays(1));
 
-        assertThrows(ValidationException.class, () -> filmController.create(film));
+        assertThrows(IllegalArgumentException.class, () -> filmController.create(film));
     }
 
     @Test
@@ -100,7 +103,7 @@ class FilmValidationTest {
         Film film = createValidFilm();
         film.setId(null);
 
-        assertThrows(ValidationException.class, () -> filmController.update(film));
+        assertThrows(IllegalArgumentException.class, () -> filmController.update(film));
     }
 
     @Test
@@ -120,7 +123,7 @@ class FilmValidationTest {
         updatedFilm.setId(createdFilm.getId());
         updatedFilm.setReleaseDate(minReleaseDate.minusDays(1));
 
-        assertThrows(ValidationException.class, () -> filmController.update(updatedFilm));
+        assertThrows(IllegalArgumentException.class, () -> filmController.update(updatedFilm));
     }
 
     @Test
