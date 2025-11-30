@@ -28,7 +28,7 @@ public class FilmService {
 
     private final Map<Long, Set<Long>> likes = new HashMap<>();
 
-    public Collection<Film> getAll() {
+    public List<Film> getAll() {
         log.info("Получен запрос на получение всех фильмов");
         return filmStorage.getAll();
     }
@@ -45,15 +45,7 @@ public class FilmService {
     public Film update(Film film) {
         log.info("Получен запрос на обновление фильма: {}", film);
 
-        if (film.getId() == null) {
-            log.warn("Id фильма не указан");
-            throw new IllegalArgumentException("Id должен быть указан");
-        }
-
-        if (!filmStorage.exists(film.getId())) {
-            log.warn("Фильм с id = {} не найден", film.getId());
-            throw new NotFoundException("Фильм с id = " + film.getId() + " не найден");
-        }
+        isValidFilm(film);
 
         validateFilm(film);
         Film updatedFilm = filmStorage.update(film);
@@ -137,6 +129,18 @@ public class FilmService {
     private void getUserOrThrow(Long userId) {
         if (!userStorage.exists(userId)) {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден");
+        }
+    }
+
+    private void isValidFilm(Film film) {
+        if (film.getId() == null) {
+            log.warn("Id фильма не указан");
+            throw new IllegalArgumentException("Id должен быть указан");
+        }
+
+        if (!filmStorage.exists(film.getId())) {
+            log.warn("Фильм с id = {} не найден", film.getId());
+            throw new NotFoundException("Фильм с id = " + film.getId() + " не найден");
         }
     }
 }

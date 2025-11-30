@@ -23,7 +23,7 @@ public class UserService {
     private final UserStorage userStorage;
     private final Map<Long, Set<Long>> friends = new HashMap<>();
 
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         log.info("Получен запрос на получение всех пользователей");
         return userStorage.getAll();
     }
@@ -44,15 +44,7 @@ public class UserService {
     public User update(User user) {
         log.info("Получен запрос на обновление пользователя: {}", user);
 
-        if (user.getId() == null) {
-            log.warn("Id пользователя не указан");
-            throw new IllegalArgumentException("Id должен быть указан");
-        }
-
-        if (!userStorage.exists(user.getId())) {
-            log.warn("Пользователь с id = {} не найден", user.getId());
-            throw new NotFoundException("Пользователь с id = " + user.getId() + " не найден");
-        }
+        isValidUser(user);
 
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -151,5 +143,17 @@ public class UserService {
             throw new NotFoundException("Пользователь с id = " + userId + " не найден");
         }
         return user;
+    }
+
+    private void isValidUser(User user) {
+        if (user.getId() == null) {
+            log.warn("Id пользователя не указан");
+            throw new IllegalArgumentException("Id должен быть указан");
+        }
+
+        if (!userStorage.exists(user.getId())) {
+            log.warn("Пользователь с id = {} не найден", user.getId());
+            throw new NotFoundException("Пользователь с id = " + user.getId() + " не найден");
+        }
     }
 }

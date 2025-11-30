@@ -26,7 +26,7 @@ public class FilmController {
     private final FilmService filmService;
 
     @GetMapping
-    public Collection<Film> getFilms() {
+    public List<Film> getFilms() {
         log.info("Получен запрос на получение всех фильмов");
         return filmService.getAll();
     }
