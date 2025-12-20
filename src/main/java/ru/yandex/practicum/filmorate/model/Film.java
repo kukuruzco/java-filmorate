@@ -7,10 +7,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
-/**
- * Film.
- */
 @Data
 public class Film {
     Long id;
@@ -22,4 +20,7 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Integer duration;
+    @NotNull(message = "Рейтинг MPA обязателен")
+    private MpaRating mpa;
+    private Set<Genre> genres;
 }
