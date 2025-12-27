@@ -1,51 +1,46 @@
 CREATE TABLE IF NOT EXISTS mpa_ratings (
     id INTEGER PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS genres (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS films (
-    id BIGSERIAL PRIMARY KEY,
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    description VARCHAR(1000),
     release_date DATE NOT NULL,
-    duration INTEGER,
-    mpa_rating INTEGER,
-    FOREIGN KEY (mpa_rating) REFERENCES mpa_ratings(id)
+    duration INTEGER NOT NULL CHECK (duration > 0),
+    mpa_rating INTEGER REFERENCES mpa_ratings(id)
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    id BIGSERIAL PRIMARY KEY,
-    email VARCHAR(100) NOT NULL,
-    login VARCHAR(50) NOT NULL,
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    login VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(100),
-    birthday DATE
+    birthday DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS film_genres (
-    film_id BIGINT,
-    genre_id INTEGER,
-    PRIMARY KEY (film_id, genre_id),
-    FOREIGN KEY (film_id) REFERENCES films(id) ON DELETE CASCADE,
-    FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
+    film_id INTEGER NOT NULL REFERENCES films(id) ON DELETE CASCADE,
+    genre_id INTEGER NOT NULL REFERENCES genres(id),
+    PRIMARY KEY (film_id, genre_id)
 );
 
 CREATE TABLE IF NOT EXISTS likes (
-    film_id BIGINT,
-    user_id BIGINT,
-    PRIMARY KEY (film_id, user_id),
-    FOREIGN KEY (film_id) REFERENCES films(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    film_id INTEGER NOT NULL REFERENCES films(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY (film_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS friendships (
-    user_id BIGINT,
-    friend_id BIGINT,
-    PRIMARY KEY (user_id, friend_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (friend_id) REFERENCES users(id) ON DELETE CASCADE
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    friend_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status VARCHAR(20) DEFAULT 'unconfirmed',
+    PRIMARY KEY (user_id, friend_id)
 );

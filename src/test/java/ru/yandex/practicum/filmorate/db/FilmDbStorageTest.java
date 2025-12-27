@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.db;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
-import ru.yandex.practicum.filmorate.storage.db.FilmDbStorage;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Transactional
 class FilmDbStorageTest {
     private final FilmDbStorage filmStorage;
     private final JdbcTemplate jdbcTemplate;
@@ -111,6 +112,11 @@ class FilmDbStorageTest {
 
     @Test
     void testGetPopularFilms() {
+        System.out.println("DEBUG: firstFilmId = " + firstFilmId);
+        System.out.println("DEBUG: firstUserId = " + firstUserId);
+        System.out.println("DEBUG: secondUserId = " + secondUserId);
+        System.out.println("DEBUG: thirdUserId = " + thirdUserId);
+
         assertThat(firstUserId).isNotNull();
         assertThat(secondUserId).isNotNull();
         assertThat(thirdUserId).isNotNull();

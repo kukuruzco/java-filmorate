@@ -29,6 +29,25 @@ INSERT INTO films (name, description, release_date, duration, mpa_rating) VALUES
 ('Форрест Гамп', 'Жизнь человека.', '1994-07-06', 142, 3);
 
 INSERT INTO users (email, login, name, birthday) VALUES
-('user1@test.com', 'user1', 'User One', '1990-01-01'),
-('user2@test.com', 'user2', 'User Two', '1992-02-02'),
-('user3@test.com', 'user3', 'User Three', '1994-03-03');
+('user1@example.com', 'user1', 'Анна Иванова', '1990-05-15'),
+('user2@example.com', 'user2', 'Петр Петров', '1992-08-22'),
+('user3@example.com', 'user3', 'Мария Сидорова', '1994-03-10'),
+('user4@example.com', 'user4', 'Иван Козлов', '1991-11-05');
+
+INSERT INTO friendships (user_id, friend_id, status) VALUES
+-- Пользователь 1 дружит с пользователями 2 и 3 (подтвержденная дружба)
+(1, 2, 'confirmed'),
+(2, 1, 'confirmed'),  -- взаимная связь
+(1, 3, 'confirmed'),
+(3, 1, 'confirmed'),  -- взаимная связь
+
+-- Пользователь 2 дружит с пользователем 3 (подтвержденная дружба)
+(2, 3, 'confirmed'),
+(3, 2, 'confirmed'),  -- взаимная связь
+
+-- Пользователь 2 отправил запрос пользователю 4 (неподтвержденный)
+(2, 4, 'unconfirmed'),
+
+-- Пользователь 3 дружит с пользователем 4 (подтвержденная дружба)
+(3, 4, 'confirmed'),
+(4, 3, 'confirmed');

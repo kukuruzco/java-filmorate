@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.db;
+package ru.yandex.practicum.filmorate.db;
 
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
