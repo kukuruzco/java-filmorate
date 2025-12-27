@@ -1,11 +1,3 @@
-DELETE FROM likes;
-DELETE FROM film_genres;
-DELETE FROM friendships;
-DELETE FROM films;
-DELETE FROM users;
-DELETE FROM genres;
-DELETE FROM mpa_ratings;
-
 INSERT INTO mpa_ratings (id, name, description) VALUES
 (1, 'G', 'Нет возрастных ограничений'),
 (2, 'PG', 'Детям рекомендуется смотреть фильм с родителями'),

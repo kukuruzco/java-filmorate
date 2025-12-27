@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.db;
+package ru.yandex.practicum.filmorate.db;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MpaRating;
+import ru.yandex.practicum.filmorate.storage.db.FilmDbStorage;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -21,10 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Sql(scripts = {
-        "file:src/test/resources/schema.sql",
-        "file:src/test/resources/data.sql"  // БЕЗ лайков и дружбы
-}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class FilmDbStorageTest {
     private final FilmDbStorage filmStorage;
     private final JdbcTemplate jdbcTemplate;
